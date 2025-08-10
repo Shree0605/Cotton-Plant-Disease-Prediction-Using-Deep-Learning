@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CropCure - Cotton Disease Detection</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: url('{{ url_for("static", filename="t.png") }}') no-repeat center center fixed;
+            background-size: cover;
+            color: #f0f8f0;
+            text-align: center;
+        }
+
+        /* ✅ Fixed header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(245, 250, 245, 0.2);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            padding: 15px 70px;
+            font-style: italic;
+            font-size: 40px;
+            font-weight: bold;
+            color: #199F9F;
+            text-align: left;
+            text-shadow: 1px 1px 3px #000;
+            z-index: 1000;
+        }
+
+        /* ✅ Add padding so content doesn't hide behind fixed header */
+        .page-content {
+            padding-top: 100px;
+        }
+
+        /* ✅ Wider container, less height growth */
+        .container {
+            margin: 20px auto;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            width: 50%;   /* Increased width */
+            max-width: 800px; /* Limit max width */
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            color: #199F9F;
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            display: block;
+            margin: 15px auto;
+            color: #fff;
+        }
+
+        button {
+            background-color: #32cd32;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #28a428;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #f0f8f0;
+        }
+
+        img {
+            margin-top: 15px;
+            max-width: 50%;
+            border-radius: 8px;
+            border: 2px solid #a8ffb0;
+        }
+        .prescriptive-btn {
+            display: inline-block;
+            margin-left: 10px;
+            background-color: #199F9F;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: 0.3s ease;
+        }
+        
+        .prescriptive-btn:hover {
+            background-color: #127777;
+        }
+        
+    </style>
+</head>
+<body>
+    <header>CropCure</header>
+
+    <div class="page-content">
+        <div class="container">
+            <h2>Cotton Plant Disease Prediction</h2>
+            <form method="POST" enctype="multipart/form-data">
+                <input type="file" name="file" required>
+                <button type="submit">Predict</button>
+            </form>
+            
+            {% if prediction %}
+            <div class="result">
+                <p><strong>Disease:</strong> {{ prediction.replace('_', ' ') }}</p>
+                <p><strong>Confidence:</strong> {{ confidence | round(2) }}%</p>
+                <img src="{{ filename }}" alt="Uploaded Image">
+            </div>
+            
+            {% if prediction != 'Healthy' %}
+                <!-- ✅ Separate form for Prescriptive Care -->
+                <form action="/details" method="POST">
+                    <input type="hidden" name="disease" value="{{ prediction }}">
+                    <input type="hidden" name="confidence" value="{{ confidence }}">
+                    <input type="hidden" name="filename" value="{{ filename }}">
+                    <button type="submit" style="margin-top:10px;">Prescriptive Care</button>
+                </form>
+            {% endif %}
+            {% endif %}            
+        </div>
+    </div>
+</body>
+</html>

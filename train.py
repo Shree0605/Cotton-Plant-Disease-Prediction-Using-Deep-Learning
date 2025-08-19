@@ -4,7 +4,6 @@ from tensorflow.keras.applications import EfficientNetB3
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
 
-# ✅ Data Augmentation
 train_datagen = ImageDataGenerator(
     rotation_range=40,
     width_shift_range=0.2,
